@@ -8,6 +8,7 @@ const hbs          = require('hbs');
 const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
+
 const session      = require('express-session');
 const bcrypt       = require('bcrypt');
 const passport     = require('passport');
@@ -35,6 +36,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 // Passport Setup
 app.use(session({
   secret: 'our-passport-local-strategy-app',
@@ -42,10 +44,12 @@ app.use(session({
   saveUninitialized: true
 }));
 
+// Passport serialization
 passport.serializeUser((user, cb) => {
   cb(null, user._id);
 });
 
+// Passport deserialization
 passport.deserializeUser((id, cb) => {
   User.findById(id, (err, user) => {
     if (err) { return cb(err); }
@@ -53,6 +57,7 @@ passport.deserializeUser((id, cb) => {
   });
 });
 
+// Passport stategy username && password
 passport.use(new LocalStrategy((username, password, next) => {
   User.findOne({ username }, (err, user) => {
     if (err) {
@@ -69,11 +74,12 @@ passport.use(new LocalStrategy((username, password, next) => {
   });
 }));
 
+
+// Initialize passport and passport session
 app.use(passport.initialize());
 app.use(passport.session());
 
 // Express View engine setup
-
 app.use(require('node-sass-middleware')({
   src:  path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
