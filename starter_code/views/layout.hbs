@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>{{title}}</title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <nav>
-      <a href="/">Home</a> -
-      {{#if username}}
-        <a href="/private">See the best developer</a> -
-        <a href="/logout">Log out</a>
-      {{else}}
-        <a href="/signup">Sign up</a> -
-        <a href="/login">Log in</a>
-      {{/if}}
-      ----------------------
-      {{username}}
-      <hr>
 
-    </nav>
+<head>
+  <title>{{title}}</title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
 
-    {{{body}}}
+<body>
+  <nav>
+    <a href="/">Home</a> -
+    {{#if username}}
+    <a href="/private">See the best developer</a> -
+    <a href="/logout">Log out</a>
+    {{else}}
+    <a href="/auth/facebook">Login With Facebook</a>
+    <a href="/signup">Sign up</a> -
+    <a href="/login">Log in</a>
+    {{/if}}
+    ----------------------
+    {{username}}
+    <hr>
 
-    <script src='/javascripts/script.js'></script>
-  </body>
+  </nav>
+
+  {{{body}}}
+
+  <script src='/javascripts/script.js'></script>
+</body>
+
 </html>

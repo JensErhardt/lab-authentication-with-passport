@@ -12,19 +12,19 @@ authRoutes.get('/signup', (req, res, next) => {
   res.render('auth/signup');
 });
 
-authRoutes.post("/signup", (req, res, next) => {
+authRoutes.post('/signup', (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  if (username === "" || password === "") {
-    res.render("auth/signup", { message: "Indicate username and password" });
+  if (username === '' || password === '') {
+    res.render('auth/signup', { message: 'Indicate username and password' });
     return;
   }
 
   User.findOne({ username })
   .then(user => {
     if (user !== null) {
-      res.render("auth/signup", { message: "The username already exists" });
+      res.render('auth/signup', { message: 'The username already exists' });
       return;
     }
 
@@ -38,9 +38,9 @@ authRoutes.post("/signup", (req, res, next) => {
 
     newUser.save((err) => {
       if (err) {
-        res.render("auth/signup", { message: "Something went wrong" });
+        res.render('auth/signup', { message: 'Something went wrong' });
       } else {
-        res.redirect("/");
+        res.redirect('/');
       }
     });
   })
@@ -53,7 +53,7 @@ authRoutes.get('/login', (req, res, next) => {
   res.render('auth/login');
 });
 
-authRoutes.post('login', passport.authenticate('local', {
+authRoutes.post('/login', passport.authenticate('local', {
   successRedirect: '/',
   failureRedirect: '/login',
   failureFlash: true,
@@ -68,5 +68,13 @@ authRoutes.get('/logout', (req, res) => {
   req.logout();
   res.redirect('/login');
 });
+
+// Social Login: Facebook
+authRoutes.get('/auth/facebook', passport.authenticate('facebook'));
+
+authRoutes.get('/auth/facebook/callback', passport.authenticate('facebook', {
+  successRedirect: '/private-page',
+  failureRedirect: '/'
+}));
 
 module.exports = authRoutes;
