@@ -8,17 +8,17 @@ const hbs          = require('hbs');
 const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
-const session      = require("express-session");
-const bcrypt       = require("bcrypt");
-const passport     = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
+const session      = require('express-session');
+const bcrypt       = require('bcrypt');
+const passport     = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
-const User = require("./models/user");
+const User = require('./models/user');
 
 
 mongoose.Promise = Promise;
 mongoose
-  .connect('mongodb://localhost/starter-code', {useMongoClient: true})
+  .connect('mongodb://localhost/auth-with-passport', {useMongoClient: true})
   .then(() => {
     console.log('Connected to Mongo!')
   }).catch(err => {
@@ -37,7 +37,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 // Passport Setup
 app.use(session({
-  secret: "our-passport-local-strategy-app",
+  secret: 'our-passport-local-strategy-app',
   resave: true,
   saveUninitialized: true
 }));
@@ -59,10 +59,10 @@ passport.use(new LocalStrategy((username, password, next) => {
       return next(err);
     }
     if (!user) {
-      return next(null, false, { message: "Incorrect username" });
+      return next(null, false, { message: 'Incorrect username' });
     }
     if (!bcrypt.compareSync(password, user.password)) {
-      return next(null, false, { message: "Incorrect password" });
+      return next(null, false, { message: 'Incorrect password' });
     }
     
     return next(null, user);
@@ -102,7 +102,7 @@ const index = require('./routes/index');
 app.use('/', index);
 
 // Routes
-const authRoutes = require("./routes/passportRouter");
+const authRoutes = require('./routes/auth-routes');
 app.use('/', authRoutes);
 
 
